@@ -23,5 +23,4 @@ Plugin 'fruit-in/brainfuck-vim'
 
 ## TODO
 * Interpreter
-* Conceal
 * Debug
