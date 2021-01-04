@@ -6,7 +6,7 @@ syntax match bfMove    "[<>]"
 syntax match bfData    "[+-]"
 syntax match bfIO      "[.,]"
 syntax match bfLoop    "[[\]]"
-syntax match bfComment "[^<>+-.,[\]].*"
+syntax match bfComment "[^<>+-.,[\] ].*"
 
 highlight def link bfMove    Identifier
 highlight def link bfData    Normal
