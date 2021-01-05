@@ -28,5 +28,5 @@ Plugin 'fruit-in/brainfuck-vim'
 ```
 
 ## TODO
-* Indent
 * Debug
+* Docs
