@@ -1,8 +1,14 @@
 # brainfuck-vim
-A syntax highlight vim plugin for brainfuck programming language.
+A vim plugin for brainfuck programming language.
 
 ## Features
 * Syntax highlight
+* Interpreter
+
+## Usage
+```vim
+:call brainfuck#Run()
+```
 
 ## Installation
 ### [vim-plug](https://github.com/junegunn/vim-plug/)
@@ -22,5 +28,5 @@ Plugin 'fruit-in/brainfuck-vim'
 ```
 
 ## TODO
-* Interpreter
+* Indent
 * Debug
