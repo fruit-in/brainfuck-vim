@@ -7,7 +7,7 @@ A vim plugin for brainfuck programming language.
 
 ## Usage
 ```vim
-:call brainfuck#Run()
+:BFRun
 ```
 
 ## Installation
@@ -26,7 +26,3 @@ Plugin 'fruit-in/brainfuck-vim'
 ```vim
 :PluginInstall
 ```
-
-## TODO
-* Debug
-* Docs
