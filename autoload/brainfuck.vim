@@ -129,6 +129,8 @@ function! s:Init() abort "{{{
     let s:bf_buffer_nr = winnr()
     if bufwinnr('bf_tmp') == -1
       below 20vnew +set\ nonumber\ |\ set\ cursorline\ |\ set\ buftype=nofile bf_tmp
+      let b:bf_tmp_buffer = 0
+      autocmd BufEnter * if (winnr('$') == 1 && exists('b:bf_tmp_buffer')) | q | endif
     endif
     let s:bf_tmp_buffer_nr = bufwinnr('bf_tmp')
 
