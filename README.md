@@ -4,10 +4,12 @@ A vim plugin for brainfuck programming language.
 ## Features
 * Syntax highlight
 * Interpreter
+* Debugger
 
 ## Usage
 ```vim
 :BFRun
+:BFDebug
 ```
 
 ## Installation

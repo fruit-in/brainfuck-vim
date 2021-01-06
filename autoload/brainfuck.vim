@@ -1,5 +1,5 @@
-function! brainfuck#Run() abort "{{{
-  call s:Init()
+function! brainfuck#Run(bf_debug) abort "{{{
+  call s:Init(a:bf_debug)
 
   while s:bf_cmdpointer < len(s:bf_commands)
     let l:foo = s:bf_commands[s:bf_cmdpointer]
@@ -7,37 +7,52 @@ function! brainfuck#Run() abort "{{{
     let l:lnum = l:foo[1]
     let l:cnum = l:foo[2]
 
+    if !s:bf_run_fast && a:bf_debug
+      execute s:bf_buffer_nr . 'wincmd w'
+      call cursor(l:lnum, l:cnum)
+      redraw
+    endif
+
     if l:command == 62
-      call s:IncreasePointer(l:lnum, l:cnum)
+      call s:IncreasePointer(l:lnum, l:cnum, a:bf_debug)
     elseif l:command == 60
-      call s:DecreasePointer(l:lnum, l:cnum)
+      call s:DecreasePointer(l:lnum, l:cnum, a:bf_debug)
     elseif l:command == 43
-      call s:IncreaseValue(l:lnum, l:cnum)
+      call s:IncreaseValue(l:lnum, l:cnum, a:bf_debug)
     elseif l:command == 45
-      call s:DecreaseValue(l:lnum, l:cnum)
+      call s:DecreaseValue(l:lnum, l:cnum, a:bf_debug)
     elseif l:command == 46
-      call s:Output()
+      call s:Output(a:bf_debug)
     elseif l:command == 44
-      call s:Input(l:lnum, l:cnum)
+      call s:Input(l:lnum, l:cnum, a:bf_debug)
     elseif l:command == 91
       call s:JumpForward(l:lnum, l:cnum)
     elseif l:command == 93
       call s:JumpBackward(l:lnum, l:cnum)
+    elseif l:command == 33
+      if a:bf_debug
+        echo 'Press any key to continue'
+        call getchar()
+      endif
+    elseif l:command == 124
+      if a:bf_debug
+        let s:bf_run_fast = !s:bf_run_fast
+      endif
     else
       throw 'Unknown command at ' . l:lnum . ':' . l:cnum
     endif
 
-    if g:bf_run_delay
+    if !s:bf_run_fast && a:bf_debug
       execute s:bf_buffer_nr . 'wincmd w'
       call cursor(l:lnum, l:cnum)
       redraw
-      execute 'sleep ' . g:bf_run_delay . 'm'
+      execute 'sleep ' . g:bf_debug_delay . 'm'
     endif
 
     let s:bf_cmdpointer += 1
   endwhile
 
-  if g:bf_run_delay
+  if a:bf_debug
     execute s:bf_tmp_buffer_nr . 'wincmd w'
     setlocal nomodifiable
     execute s:bf_buffer_nr . 'wincmd w'
@@ -46,7 +61,7 @@ function! brainfuck#Run() abort "{{{
   echo list2str(s:bf_output)
 endfunction "}}}
 
-function! s:Init() abort "{{{
+function! s:Init(bf_debug) abort "{{{
   if !exists("g:bf_array_size") "{{{
     let g:bf_array_size = 30000
   elseif g:bf_array_size <= 0
@@ -67,10 +82,10 @@ function! s:Init() abort "{{{
   elseif g:bf_value_mode < 0 || g:bf_value_mode > 2
     throw 'The range of g:bf_value_mode is from 0 to 2'
   endif
-  if !exists("g:bf_run_delay")
-    let g:bf_run_delay = 0
-  elseif g:bf_run_delay < 0
-    throw 'g:bf_run_delay should be a positive integer'
+  if !exists("g:bf_debug_delay")
+    let g:bf_debug_delay = 200
+  elseif g:bf_debug_delay < 0
+    throw 'g:bf_debug_delay should be a positive integer'
   endif "}}}
 
   if g:bf_value_type == 0 "{{{
@@ -113,7 +128,7 @@ function! s:Init() abort "{{{
       let l:curr_char = l:curr_line[cnum]
       if l:curr_char == 32
         continue
-      elseif index([43, 44, 45, 46, 60, 62, 91, 93], l:curr_char) != -1
+      elseif index([33, 43, 44, 45, 46, 60, 62, 91, 93, 124], l:curr_char) != -1
         call add(s:bf_commands, [l:curr_char, lnum + 1, cnum + 1])
       else
         break
@@ -121,11 +136,12 @@ function! s:Init() abort "{{{
     endfor
   endfor "}}}
 
+  let s:bf_run_fast = 1
   let s:bf_array = repeat([0], g:bf_array_size)
   let s:bf_pointer = 0
   let s:bf_output = []
 
-  if g:bf_run_delay "{{{
+  if a:bf_debug "{{{
     let s:bf_buffer_nr = winnr()
     if bufwinnr('bf_tmp') == -1
       below 20vnew +set\ nonumber\ |\ set\ cursorline\ |\ set\ buftype=nofile bf_tmp
@@ -144,7 +160,7 @@ function! s:Init() abort "{{{
   endif "}}}
 endfunction "}}}
 
-function! s:IncreasePointer(lnum, cnum) abort "{{{
+function! s:IncreasePointer(lnum, cnum, bf_debug) abort "{{{
   let s:bf_pointer += 1
 
   if s:bf_pointer >= g:bf_array_size
@@ -157,13 +173,13 @@ function! s:IncreasePointer(lnum, cnum) abort "{{{
     endif
   endif
 
-  if g:bf_run_delay
+  if a:bf_debug
     execute s:bf_tmp_buffer_nr . 'wincmd w'
     execute 'normal! ' . (s:bf_pointer + 1) . 'G'
   endif
 endfunction "}}}
 
-function! s:DecreasePointer(lnum, cnum) abort "{{{
+function! s:DecreasePointer(lnum, cnum, bf_debug) abort "{{{
   let s:bf_pointer -= 1
 
   if s:bf_pointer < 0
@@ -176,13 +192,13 @@ function! s:DecreasePointer(lnum, cnum) abort "{{{
     endif
   endif
 
-  if g:bf_run_delay
+  if a:bf_debug
     execute s:bf_tmp_buffer_nr . 'wincmd w'
     execute 'normal! ' . (s:bf_pointer + 1) . 'G'
   endif
 endfunction "}}}
 
-function! s:IncreaseValue(lnum, cnum) abort "{{{
+function! s:IncreaseValue(lnum, cnum, bf_debug) abort "{{{
   let s:bf_array[s:bf_pointer] += 1
 
   if s:bf_array[s:bf_pointer] > s:bf_value_max
@@ -195,13 +211,13 @@ function! s:IncreaseValue(lnum, cnum) abort "{{{
     endif
   endif
 
-  if g:bf_run_delay
+  if a:bf_debug
     execute s:bf_tmp_buffer_nr . 'wincmd w'
     call setline(s:bf_pointer + 1, printf('%6d: %11d', s:bf_pointer, s:bf_array[s:bf_pointer]))
   endif
 endfunction "}}}
 
-function! s:DecreaseValue(lnum, cnum) abort "{{{
+function! s:DecreaseValue(lnum, cnum, bf_debug) abort "{{{
   let s:bf_array[s:bf_pointer] -= 1
 
   if s:bf_array[s:bf_pointer] < s:bf_value_min
@@ -214,21 +230,21 @@ function! s:DecreaseValue(lnum, cnum) abort "{{{
     endif
   endif
 
-  if g:bf_run_delay
+  if a:bf_debug
     execute s:bf_tmp_buffer_nr . 'wincmd w'
     call setline(s:bf_pointer + 1, printf('%6d: %11d', s:bf_pointer, s:bf_array[s:bf_pointer]))
   endif
 endfunction "}}}
 
-function! s:Output() abort "{{{
+function! s:Output(bf_debug) abort "{{{
   call add(s:bf_output, s:bf_array[s:bf_pointer])
 
-  if g:bf_run_delay
+  if a:bf_debug
     echomsg nr2char(s:bf_array[s:bf_pointer])
   endif
 endfunction "}}}
 
-function! s:Input(lnum, cnum) abort "{{{
+function! s:Input(lnum, cnum, bf_debug) abort "{{{
   echo 'Please enter a character: '
   let s:bf_array[s:bf_pointer] = getchar()
 
@@ -252,7 +268,7 @@ function! s:Input(lnum, cnum) abort "{{{
     endif
   endif
 
-  if g:bf_run_delay
+  if a:bf_debug
     execute s:bf_tmp_buffer_nr . 'wincmd w'
     call setline(s:bf_pointer + 1, printf('%6d: %11d', s:bf_pointer, s:bf_array[s:bf_pointer]))
   endif
