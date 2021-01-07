@@ -1,4 +1,6 @@
 # brainfuck-vim
+[中文](./README_CN.md)
+
 A vim plugin for brainfuck programming language.
 
 For an introduction to brainfuck, see https://www.muppetlabs.com/~breadbox/bf.
