@@ -5,6 +5,8 @@ A vim plugin for brainfuck programming language.
 
 For an introduction to brainfuck, see https://www.muppetlabs.com/~breadbox/bf.
 
+![](screenshot.gif)
+
 ## Features
 ### Syntax Highlight
 Including the basic commands (`><+-.,[]`), comments and two extra debugger only commands (`!|`).

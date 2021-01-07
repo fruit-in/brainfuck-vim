@@ -5,6 +5,8 @@ Brainfuck 语言的 vim 插件。
 
 关于 brainfuck 的介绍，可参照 https://www.muppetlabs.com/~breadbox/bf。
 
+![](screenshot.gif)
+
 ## 功能
 ### 语法高亮
 包括基本命令 (`><+-.,[]`)、注释和两个额外的调试器专用命令 (`!|`)。
