@@ -1,0 +1,205 @@
+*brainfuck-vim.txt* Brainfuck development plugin
+*brainfuck-vim*
+
+================================================================================
+     _               _        __            _               _                ~
+    | |             (_)      / _|          | |             (_)               ~
+    | |__  _ __ __ _ _ _ __ | |_ _   _  ___| | __    __   ___ _ __ ___       ~
+    | '_ \| '__/ _` | | '_ \|  _| | | |/ __| |/ /    \ \ / / | '_ ` _ \      ~
+    | |_) | | | (_| | | | | | | | |_| | (__|   <      \ V /| | | | | | |     ~
+    |_.__/|_|  \__,_|_|_| |_|_|  \__,_|\___|_|\_\      \_/ |_|_| |_| |_|     ~
+
+================================================================================
+CONTENTS                                                    *brainfuck-contents*
+
+  1. Introduction .................................. |brainfuck-introduction|
+    1.1 Syntax Highlight ........................... |brainfuck-highlight|
+    1.2 Interpreter ................................ |brainfuck-interpreter|
+    1.3 Debugger ................................... |brainfuck-debugger|
+  2. Commands ...................................... |brainfuck-commands|
+  3. Configuration ................................. |brainfuck-configuration|
+    3.1 General Configuration ...................... |brainfuck-config-general|
+      3.1.1 Array Size ............................. |g:bf_array_size|
+      3.1.2 Array Mode ............................. |g:bf_array_mode|
+      3.1.3 Value Type ............................. |g:bf_value_type|
+      3.1.4 Value Mode ............................. |g:bf_value_mode|
+      3.1.5 Value Max .............................. |g:bf_value_max|
+      3.1.6 Value Min .............................. |g:bf_value_min|
+    3.2 Debugger Configuration ..................... |brainfuck-config-debug|
+      3.2.1 Debug Delay ............................ |g:bf_debug_delay|
+  4. Troubleshooting ............................... |brainfuck-troubleshooting|
+  5. License ....................................... |brainfuck-license|
+
+================================================================================
+INTRODUCTION                                            *brainfuck-introduction*
+
+Repository: https://github.com/fruit-in/brainfuck-vim
+
+Features:
+  * Syntax highlight
+  * Interpreter
+  * Debugger
+
+For an introduction to brainfuck, see https://www.muppetlabs.com/~breadbox/bf.
+
+--------------------------------------------------------------------------------
+SYNTAX HIGHLIGHT                                           *brainfuck-highlight*
+
+Including the basic commands(`><+-.,[]`), comments and two extra debugger only
+commands(`!|`).
+
+--------------------------------------------------------------------------------
+INTERPRETER                                              *brainfuck-interpreter*
+
+The interpreter interprets the basic commands (`><+-.,[]`) and any other
+characters will be ignored.
+
+Line comments start with non-command characters (except spaces) and any valid
+commands in the comments are also ignored.
+
+The input and output field is at the bottom. >
+
+  +---------------------+
+  |Brainfuck source code|
+  |                     |
+  |                     |
+  |                     |
+  |                     |
+  +---------------------+
+  |      IO field       |
+  +---------------------+
+<
+For more features and configuration, see |brainfuck-config-general|.
+
+--------------------------------------------------------------------------------
+DEBUGGER                                                    *brainfuck-debugger*
+
+The debugger has all the features of the interpreter.
+
+It supports two extra commands (which are ignored in the interpreter):
+  * `!`: Pause program execution. Press any key to continue.
+  * `|`: The commands between two `|` will be executed one by one.
+
+It opens a debug buffer showing the status of the array. >
+
+  +---------------------+------------+
+  |Brainfuck source code|Debug buffer|
+  |                     |            |
+  |                     |            |
+  |                     |            |
+  |                     |            |
+  +---------------------+------------+
+  |             IO field             |
+  +---------------------+------------+
+<
+For more features and configuration, see |brainfuck-config-general| and
+|brainfuck-config-debug|.
+
+================================================================================
+COMMANDS                                                    *brainfuck-commands*
+
+:BFRun
+
+  Run the interpreter with the current file as input.
+
+:BFDebug
+
+  Run the debugger with the current file as input.
+
+================================================================================
+CONFIGURATION                                          *brainfuck-configuration*
+
+You can customize the behavior of the interpreter and debugger by setting some
+variables in your |vimrc|. For example: >
+  let g:bf_array_size = 3000
+  let g:bf_array_mode = 2
+  let g:bf_value_mode = 2
+<
+--------------------------------------------------------------------------------
+GENERAL CONFIGURATION                                 *brainfuck-config-general*
+
+--------------------------------------------------------------------------------
+ARRAY SIZE                                                     *g:bf_array_size*
+
+Create an array of size `g:bf_array_size`, initially all set to 0. The pointer
+is pointed to the beginning of this array.
+
+Optional values are > 0. Default value is 30,000.
+
+--------------------------------------------------------------------------------
+ARRAY MODE                                                     *g:bf_array_mode*
+
+Define the behavior when the pointer exceeds the array boundary.
+
+Optional values are {0, 1, 2}. Default value is 0.
+  * 0: Strict Mode. Throws an error when the pointer exceeds the array boundary.
+  * 1: Normal Mode. Saturating at the boundary when the pointer exceeds the
+       array boundary.
+  * 2: Circular Mode. Wrapping around at the boundary when the pointer exceeds
+       the array boundary.
+
+--------------------------------------------------------------------------------
+VALUE TYPE                                                     *g:bf_value_type*
+
+Set the type of the value.
+
+Optional values are {0, 1, 2, 3, 4, 5, 6}. Default value is 0.
+  * 0: u8.
+  * 1: i8.
+  * 2: u16.
+  * 3: i16.
+  * 4: u32.
+  * 5: i32.
+  * 6: Customization. See |g:bf_value_max| and |g:bf_value_min|.
+
+--------------------------------------------------------------------------------
+VALUE MODE                                                     *g:bf_value_mode*
+
+Define the behavior when the value exceeds the value boundary.
+
+Optional values are {0, 1, 2}. Default value is 0.
+  * 0: Strict Mode. Throws an error when the value exceeds the value boundary.
+  * 1: Normal Mode. Saturating at the boundary when the value exceeds the value
+       boundary.
+  * 2: Circular Mode. Wrapping around at the boundary when the value exceeds the
+       value boundary.
+
+--------------------------------------------------------------------------------
+VALUE MAX                                                       *g:bf_value_max*
+
+Works only when `g:bf_value_type==6`. Set the upper bound of the value.
+
+Optional values are >= 0. No default value.
+
+--------------------------------------------------------------------------------
+VALUE MIN                                                       *g:bf_value_min*
+
+Works only when `g:bf_value_type==6`. Set the lower bound of the value.
+
+Optional values are <= 0. No default value.
+
+--------------------------------------------------------------------------------
+DEBUGGER CONFIGURATION                                  *brainfuck-config-debug*
+
+--------------------------------------------------------------------------------
+DEBUG DELAY                                                   *g:bf_debug_delay*
+
+Works only in the debugger. Time interval between executing commands, in
+milliseconds.
+
+Optional values are > 0. Default value is 200.
+
+================================================================================
+TROUBLESHOOTING                                      *brainfuck-troubleshooting*
+
+For any issues, please see https://github.com/fruit-in/brainfuck-vim/issues.
+
+================================================================================
+LICENSE                                                      *brainfuck-license*
+
+This plugin is licensed under the WTFPL license. For more information, see
+http://www.wtfpl.net.
+
+================================================================================
+
+vim:ft=help:et:ts=2:norl
