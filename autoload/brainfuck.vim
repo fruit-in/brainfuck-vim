@@ -153,6 +153,7 @@ function! s:Init() abort "{{{
       call append(i, printf('%6d: %11d', i, 0))
     endfor
     execute 'normal! ddgg'
+    redraw
   endif "}}}
 endfunction "}}}
 
@@ -172,6 +173,9 @@ function! s:IncreasePointer(lnum, cnum) abort "{{{
   if s:bf_debug
     execute s:bf_debugger_nr . 'wincmd w'
     execute 'normal! ' . (s:bf_pointer + 1) . 'G'
+    if s:bf_execution_mode == 0
+      redraw
+    endif
   endif
 endfunction "}}}
 
@@ -191,6 +195,9 @@ function! s:DecreasePointer(lnum, cnum) abort "{{{
   if s:bf_debug
     execute s:bf_debugger_nr . 'wincmd w'
     execute 'normal! ' . (s:bf_pointer + 1) . 'G'
+    if s:bf_execution_mode == 0
+      redraw
+    endif
   endif
 endfunction "}}}
 
@@ -210,6 +217,9 @@ function! s:IncreaseValue(lnum, cnum) abort "{{{
   if s:bf_debug
     execute s:bf_debugger_nr . 'wincmd w'
     call setline(s:bf_pointer + 1, printf('%6d: %11d', s:bf_pointer, s:bf_array[s:bf_pointer]))
+    if s:bf_execution_mode == 0
+      redraw
+    endif
   endif
 endfunction "}}}
 
@@ -229,6 +239,9 @@ function! s:DecreaseValue(lnum, cnum) abort "{{{
   if s:bf_debug
     execute s:bf_debugger_nr . 'wincmd w'
     call setline(s:bf_pointer + 1, printf('%6d: %11d', s:bf_pointer, s:bf_array[s:bf_pointer]))
+    if s:bf_execution_mode == 0
+      redraw
+    endif
   endif
 endfunction "}}}
 
@@ -267,6 +280,9 @@ function! s:Input(lnum, cnum) abort "{{{
   if s:bf_debug
     execute s:bf_debugger_nr . 'wincmd w'
     call setline(s:bf_pointer + 1, printf('%6d: %11d', s:bf_pointer, s:bf_array[s:bf_pointer]))
+    if s:bf_execution_mode == 0
+      redraw
+    endif
   endif
 endfunction "}}}
 
