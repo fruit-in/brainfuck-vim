@@ -45,8 +45,8 @@ For an introduction to brainfuck, see https://www.muppetlabs.com/~breadbox/bf.
 --------------------------------------------------------------------------------
 SYNTAX HIGHLIGHT                                           *brainfuck-highlight*
 
-Including the basic commands(`><+-.,[]`), comments and two extra debugger only
-commands(`!|`).
+Including the basic commands (`><+-.,[]`), comments and two extra debugger only
+commands (`!|`).
 
 --------------------------------------------------------------------------------
 INTERPRETER                                              *brainfuck-interpreter*
@@ -121,8 +121,7 @@ GENERAL CONFIGURATION                                 *brainfuck-config-general*
 --------------------------------------------------------------------------------
 ARRAY SIZE                                                     *g:bf_array_size*
 
-Create an array of size `g:bf_array_size`, initially all set to 0. The pointer
-is pointed to the beginning of this array.
+Set the size of the array.
 
 Optional values are > 0. Default value is 30,000.
 
