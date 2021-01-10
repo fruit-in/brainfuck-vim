@@ -31,6 +31,8 @@ The input and output field is at the bottom.
   +---------------------+
 ```
 
+For more features and configuration, see [General Configuration](#general-configuration).
+
 ### Debugger
 Execute `:BFDebug` to run the debugger with the current file as input.
 
@@ -52,6 +54,8 @@ It opens a debug buffer showing the status of the array.
   |             IO field             |
   +---------------------+------------+
 ```
+
+For more features and configuration, see [General Configuration](#general-configuration) and [Debugger Configuration](#debugger-configuration).
 
 ## Installation
 ### [vim-plug](https://github.com/junegunn/vim-plug/)
@@ -102,7 +106,7 @@ Optional values are `{0, 1, 2, 3, 4, 5, 6}`. Default value is `0`.
 * `3`: i16.
 * `4`: u32.
 * `5`: i32.
-* `6`: Customization. Requires `g:bf_value_max` and `g:bf_value_min` to be set.
+* `6`: Customization. See [Value Max](#value-max) and [Value Min](#value-min).
 
 #### Value Mode
 Set `g:bf_value_mode` to define the behavior when the value exceeds the value boundary.
@@ -115,12 +119,12 @@ Optional values are `{0, 1, 2}`. Default value is `0`.
 #### Value Max
 Set `g:bf_value_max` to set the upper bound of the value. Works only when `g:bf_value_type == 6`.
 
-Optional values are `>= 0`. No default value.
+Optional values are `>= 0`. Default value is `255`.
 
 #### Value Min
 Set `g:bf_value_min` to set the lower bound of the value. Works only when `g:bf_value_type == 6`.
 
-Optional values are `<= 0`. No default value.
+Optional values are `<= 0`. Default value is `0`.
 
 ### Debugger Configuration
 #### Debug Delay

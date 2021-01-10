@@ -168,14 +168,14 @@ VALUE MAX                                                       *g:bf_value_max*
 
 Works only when `g:bf_value_type==6`. Set the upper bound of the value.
 
-Optional values are >= 0. No default value.
+Optional values are >= 0. Default value is 255.
 
 --------------------------------------------------------------------------------
 VALUE MIN                                                       *g:bf_value_min*
 
 Works only when `g:bf_value_type==6`. Set the lower bound of the value.
 
-Optional values are <= 0. No default value.
+Optional values are <= 0. Default value is 0.
 
 --------------------------------------------------------------------------------
 DEBUGGER CONFIGURATION                                  *brainfuck-config-debug*

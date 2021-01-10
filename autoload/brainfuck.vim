@@ -78,6 +78,16 @@ function! s:Init() abort "{{{
   elseif g:bf_value_mode < 0 || g:bf_value_mode > 2
     throw 'The range of g:bf_value_mode is from 0 to 2'
   endif
+  if !exists("g:bf_value_max")
+    let g:bf_value_max = 255
+  elseif g:bf_value_max < 0
+    throw 'g:bf_value_max should be >= 0'
+  endif
+  if !exists("g:bf_value_min")
+    let g:bf_value_min = 0
+  elseif g:bf_value_min > 0
+    throw 'g:bf_value_min should be <= 0'
+  endif
   if !exists("g:bf_debug_delay")
     let g:bf_debug_delay = 200
   elseif g:bf_debug_delay <= 0
@@ -102,14 +112,6 @@ function! s:Init() abort "{{{
   elseif g:bf_value_type == 5
     let s:bf_value_max = 2147483647
     let s:bf_value_min = -2147483648
-  elseif !exists("g:bf_value_max")
-    throw 'You did not give the value of g:bf_value_max'
-  elseif !exists("g:bf_value_min")
-    throw 'You did not give the value of g:bf_value_min'
-  elseif g:bf_value_max < 0
-    throw 'g:bf_value_max should be >= 0'
-  elseif g:bf_value_min > 0
-    throw 'g:bf_value_min should be <= 0'
   else
     let s:bf_value_max = g:bf_value_max
     let s:bf_value_min = g:bf_value_min
