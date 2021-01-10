@@ -24,7 +24,7 @@ function! brainfuck#Run(debug) abort "{{{
     elseif l:command == 45
       call s:DecreaseValue(l:lnum, l:cnum)
     elseif l:command == 46
-      call s:Output()
+      call s:Output(l:lnum, l:cnum)
     elseif l:command == 44
       call s:Input(l:lnum, l:cnum)
     elseif l:command == 91
@@ -247,11 +247,11 @@ function! s:DecreaseValue(lnum, cnum) abort "{{{
   endif
 endfunction "}}}
 
-function! s:Output() abort "{{{
+function! s:Output(lnum, cnum) abort "{{{
   call add(s:bf_output, s:bf_array[s:bf_pointer])
 
   if s:bf_debug
-    echomsg nr2char(s:bf_array[s:bf_pointer])
+    echomsg 'Output ' . nr2char(s:bf_array[s:bf_pointer]) . ' at ' . a:lnum . ':' . a:cnum
   endif
 endfunction "}}}
 
