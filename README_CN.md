@@ -3,7 +3,7 @@
 
 Brainfuck 语言的 vim 插件。
 
-关于 brainfuck 的介绍，可参照 https://www.muppetlabs.com/~breadbox/bf。
+关于 brainfuck 的介绍，可参照 https://www.muppetlabs.com/~breadbox/bf 。
 
 ![](screenshot.gif)
 
